@@ -1,25 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../model/User');
+const User = require('../models/User');
+const authController = require('../controllers/authController');
 
 // API Đăng ký
-router.post('/register', async (req, res) => {
-    const { name, email, phone, password } = req.body;
-
-    try {
-        let user = await User.findOne({ $or: [{ email }, { phone }] });
-        if (user) {
-            return res.status(400).json({ message: 'Email hoặc số điện thoại đã được sử dụng' });
-        }
-
-        user = new User({ name, email, phone, password });
-        await user.save();
-
-        res.status(201).json({ message: 'Đăng ký thành công' });
-    } catch (err) {
-        res.status(500).json({ message: 'Lỗi server', error: err.message });
-    }
-});
+router.post('/register', authController.register);
 
 // API Đăng nhập
 router.post('/login', async (req, res) => {
