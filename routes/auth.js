@@ -117,17 +117,6 @@ router.post('/login', async (req, res) => {
         });
     }
 });
-
-// API lấy danh sách người dùng 
-// router.get('/users', async (req, res) => {
-//     try {
-//         const users = await User.find().select('-password'); // Không trả về mật khẩu
-//         res.json(users);
-//     } catch (err) {
-//         res.status(500).json({ message: 'Lỗi server', error: err.message });
-//     }
-// });
-
 // API: GET /auth/users => Trả danh sách tất cả user
 router.get('/users', async (req, res) => {
     try {
@@ -137,6 +126,5 @@ router.get('/users', async (req, res) => {
         res.status(500).json({ message: 'Lỗi server' });
     }
 });
-
-
+        
 module.exports = router;
