@@ -52,7 +52,6 @@ router.post("/register", async (req, res) => {
   
     if (!name || !email || !phone || !password) {
       return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
->>>>>>> 3452b9766b751314d055cb676ebcce121f6ea082
     }
   
     // kiểm tra trùng
