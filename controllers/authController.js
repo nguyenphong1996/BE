@@ -1,12 +1,13 @@
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
+
 
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, fullName, phoneNumber } = req.body;
+        const { name, email, phone, password } = req.body;
 
         // Validation cơ bản
         if (!username || !email || !password || !fullName || !phoneNumber) {
+            Alert.alert("Thiếu thông tin", "Vui lòng điền đầy đủ tất cả các trường");
             return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin' });
         }
 
@@ -27,16 +28,13 @@ exports.register = async (req, res) => {
             return res.status(400).json({ message: 'Email đã tồn tại' });
         }
 
-        // Mã hóa mật khẩu
-        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Tạo user mới
         const user = new User({
-            username,
+            name,
             email,
-            password: hashedPassword,
-            fullName,
-            phoneNumber
+            phone,
+            password
         });
 
         await user.save();
@@ -45,12 +43,12 @@ exports.register = async (req, res) => {
             message: 'Đăng ký thành công',
             user: {
                 id: user._id,
-                username: user.username,
+                name: user.name,
                 email: user.email,
-                fullName: user.fullName,
-                phoneNumber: user.phoneNumber
+                phone: user.phone
             }
         });
+
     } catch (error) {
         console.error('Lỗi đăng ký:', error);
         res.status(500).json({ message: 'Lỗi server' });
