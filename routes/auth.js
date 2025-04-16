@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+<<<<<<< HEAD
 const User = require('../models/User');
 
 // API Đăng ký
@@ -42,8 +43,36 @@ router.post('/register', async (req, res) => {
             error: err.message,
             stack: err.stack
         });
+=======
+const User = require('../models/user.model');
+
+// API Đăng ký
+router.post("/register", async (req, res) => {
+    console.log("Dữ liệu frontend gửi lên:", req.body); // <-- Đặt lên đầu
+  
+    const { name, email, phone, password } = req.body;
+  
+    if (!name || !email || !phone || !password) {
+      return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
+>>>>>>> 3452b9766b751314d055cb676ebcce121f6ea082
     }
-});
+  
+    // kiểm tra trùng
+    const existingUser = await User.findOne({
+      $or: [{ email }, { phone }]
+    });
+  
+    if (existingUser) {
+      return res.status(400).json({ message: "Email hoặc số điện thoại đã tồn tại" });
+    }
+  
+    const user = new User({ name, email, phone, password });
+    await user.save();
+  
+    return res.status(201).json({ message: "Đăng ký thành công" });
+  });
+  
+  
 
 // API Đăng nhập
 router.post('/login', async (req, res) => {
