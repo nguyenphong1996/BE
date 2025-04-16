@@ -42,18 +42,7 @@ router.post('/register', async (req, res) => {
             error: err.message,
             stack: err.stack
         });
-        const User = require('../models/user.model');
-
-        // API Đăng ký
-        router.post("/register", async (req, res) => {
-            console.log("Dữ liệu frontend gửi lên:", req.body); // <-- Đặt lên đầu
-
-            const { name, email, phone, password } = req.body;
-
-            if (!name || !email || !phone || !password) {
-                return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
-            }
-        });
+        // Remove misplaced duplicate code
 
         // API Đăng nhập
         router.post('/login', async (req, res) => {
@@ -112,3 +101,7 @@ router.post('/register', async (req, res) => {
         });
 
         module.exports = router;
+    }
+});
+
+module.exports = router;
