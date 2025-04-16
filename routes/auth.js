@@ -42,89 +42,73 @@ router.post('/register', async (req, res) => {
             error: err.message,
             stack: err.stack
         });
-const User = require('../models/user.model');
+        const User = require('../models/user.model');
 
-// API Đăng ký
-router.post("/register", async (req, res) => {
-    console.log("Dữ liệu frontend gửi lên:", req.body); // <-- Đặt lên đầu
-  
-    const { name, email, phone, password } = req.body;
-  
-    if (!name || !email || !phone || !password) {
-      return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
-    }
-  
-    // kiểm tra trùng
-    const existingUser = await User.findOne({
-      $or: [{ email }, { phone }]
-    });
-  
-    if (existingUser) {
-      return res.status(400).json({ message: "Email hoặc số điện thoại đã tồn tại" });
-    }
-  
-    const user = new User({ name, email, phone, password });
-    await user.save();
-  
-    return res.status(201).json({ message: "Đăng ký thành công" });
-  });
-  
-  
+        // API Đăng ký
+        router.post("/register", async (req, res) => {
+            console.log("Dữ liệu frontend gửi lên:", req.body); // <-- Đặt lên đầu
 
-// API Đăng nhập
-router.post('/login', async (req, res) => {
-    const { emailOrPhone, password } = req.body;
+            const { name, email, phone, password } = req.body;
 
-    // Kiểm tra thông tin nhập vào
-    if (!emailOrPhone || !password) {
-        return res.status(400).json({ message: 'Vui lòng nhập email/SĐT và mật khẩu' });
-    }
-
-    try {
-        // Tìm người dùng
-        const user = await User.findOne({
-            $or: [{ email: emailOrPhone }, { phone: emailOrPhone }]
-        });
-
-        // Kiểm tra người dùng tồn tại
-        if (!user) {
-            return res.status(400).json({
-                message: 'Tài khoản không tồn tại'
-            });
-        }
-
-        // Kiểm tra mật khẩu
-        if (user.password !== password) {
-            return res.status(400).json({
-                message: 'Mật khẩu không đúng'
-            });
-        }
-
-        res.json({
-            message: 'Đăng nhập thành công',
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                phone: user.phone
+            if (!name || !email || !phone || !password) {
+                return res.status(400).json({ message: "Vui lòng nhập đầy đủ thông tin" });
             }
         });
-    } catch (err) {
-        console.error('Lỗi đăng nhập:', err);
-        res.status(500).json({
-            message: 'Lỗi server',
-            error: err.message
+
+        // API Đăng nhập
+        router.post('/login', async (req, res) => {
+            const { emailOrPhone, password } = req.body;
+
+            // Kiểm tra thông tin nhập vào
+            if (!emailOrPhone || !password) {
+                return res.status(400).json({ message: 'Vui lòng nhập email/SĐT và mật khẩu' });
+            }
+
+            try {
+                // Tìm người dùng
+                const user = await User.findOne({
+                    $or: [{ email: emailOrPhone }, { phone: emailOrPhone }]
+                });
+
+                // Kiểm tra người dùng tồn tại
+                if (!user) {
+                    return res.status(400).json({
+                        message: 'Tài khoản không tồn tại'
+                    });
+                }
+
+                // Kiểm tra mật khẩu
+                if (user.password !== password) {
+                    return res.status(400).json({
+                        message: 'Mật khẩu không đúng'
+                    });
+                }
+
+                res.json({
+                    message: 'Đăng nhập thành công',
+                    user: {
+                        id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        phone: user.phone
+                    }
+                });
+            } catch (err) {
+                console.error('Lỗi đăng nhập:', err);
+                res.status(500).json({
+                    message: 'Lỗi server',
+                    error: err.message
+                });
+            }
         });
-    }
-});
-// API: GET /auth/users => Trả danh sách tất cả user
-router.get('/users', async (req, res) => {
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch (err) {
-        res.status(500).json({ message: 'Lỗi server' });
-    }
-});
-        
-module.exports = router;
+        // API: GET /auth/users => Trả danh sách tất cả user
+        router.get('/users', async (req, res) => {
+            try {
+                const users = await User.find();
+                res.json(users);
+            } catch (err) {
+                res.status(500).json({ message: 'Lỗi server' });
+            }
+        });
+
+        module.exports = router;
