@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-<<<<<<< HEAD
 const User = require('../models/User');
 
 // API Đăng ký
@@ -43,7 +42,6 @@ router.post('/register', async (req, res) => {
             error: err.message,
             stack: err.stack
         });
-=======
 const User = require('../models/user.model');
 
 // API Đăng ký
